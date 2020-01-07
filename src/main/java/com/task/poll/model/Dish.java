@@ -18,17 +18,25 @@ public class Dish extends AbstractBaseEntity {
     public Dish() {
     }
 
+    public Dish(Dish copy) {
+        this(copy.getId(),copy.getName(),copy.getPrice());
+    }
+
     public Dish(String name, BigDecimal price, Restaurant restaurant) {
         this.name = name;
         this.price = price;
         this.restaurant = restaurant;
     }
 
-    public Dish(int id, String name, BigDecimal price, Restaurant restaurant) {
+    public Dish(int id, String name, BigDecimal price) {
         super(id);
         this.name = name;
         this.price = price;
-        this.restaurant = restaurant;
+    }
+
+    public Dish( String name, BigDecimal price) {
+        this.name = name;
+        this.price = price;
     }
 
     @Column(name = "name")

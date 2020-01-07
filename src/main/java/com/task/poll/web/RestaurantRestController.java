@@ -26,7 +26,7 @@ import static com.task.poll.util.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(RestaurantRestController.REST_URL)
 public class RestaurantRestController {
-    static final String REST_URL = "/rest/restaurants";
+    static final String REST_URL = "/rest/restaurants/";
 
     final RestaurantRepository restaurantRepository;
 

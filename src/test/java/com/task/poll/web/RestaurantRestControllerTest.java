@@ -1,5 +1,6 @@
 package com.task.poll.web;
 
+import com.task.poll.DishTestData;
 import com.task.poll.RestaurantTestData;
 import com.task.poll.model.Restaurant;
 import com.task.poll.repository.RestaurantRepository;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
+import static com.task.poll.DishTestData.*;
 import static com.task.poll.RestaurantTestData.*;
 import static com.task.poll.TestUtil.readFromJson;
 import static com.task.poll.UserTestData.*;
@@ -50,7 +52,7 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getOne() throws Exception {
+    void get() throws Exception {
         perform(doGet(REST_1_ID).basicAuth(USER))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -59,8 +61,8 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getOneNotFound() throws Exception {
-        perform(doGet(REST_1_ID + 100).basicAuth(USER))
+    void getNotFound() throws Exception {
+        perform(doGet(NOT_EXISTED_ID).basicAuth(USER))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
@@ -96,7 +98,7 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     void updateNotFound() throws Exception {
         Restaurant updated = RestaurantTestData.getUpdated();
-        perform(doPut(REST_1_ID + 100).jsonBody(updated).basicAuth(ADMIN))
+        perform(doPut(NOT_EXISTED_ID).jsonBody(updated).basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
@@ -110,7 +112,7 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteNotFound() throws Exception {
-        perform(doDelete(REST_1_ID + 100).basicAuth(ADMIN))
+        perform(doDelete(NOT_EXISTED_ID).basicAuth(ADMIN))
                 .andExpect(status().isUnprocessableEntity());
     }
 }
