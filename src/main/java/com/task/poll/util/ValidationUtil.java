@@ -40,6 +40,12 @@ public class ValidationUtil {
         }
     }
 
+    public static void checkNotNew(AbstractBaseEntity bean) {
+        if (bean.isNew()) {
+            throw new IllegalRequestDataException(bean + " must not be new (id=" + bean.getId() + ")");
+        }
+    }
+
     public static void assureIdConsistent(AbstractBaseEntity bean, int id) {
 //      conservative when you reply, but accept liberally (http://stackoverflow.com/a/32728226/548473)
         if (bean.isNew()) {

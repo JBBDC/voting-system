@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import static com.task.poll.DishTestData.*;
 import static com.task.poll.RestaurantTestData.*;
 import static com.task.poll.UserTestData.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

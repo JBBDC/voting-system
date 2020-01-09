@@ -19,8 +19,8 @@ import java.util.Set;
 @Service
 public class RestaurantUtil {
 
-    private static final LocalDateTime TODAY_START = LocalDate.now().atTime(LocalTime.MIN);
-    private static final LocalDateTime TODAY_END = LocalDate.now().atTime(LocalTime.MAX);
+    private static final LocalDate TODAY_START = LocalDate.now();
+    private static final LocalDate TODAY_END = LocalDate.now();
 
     static VoteRepository voteRepository;
 

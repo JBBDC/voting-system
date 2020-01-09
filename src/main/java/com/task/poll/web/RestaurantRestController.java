@@ -26,7 +26,7 @@ import static com.task.poll.util.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(RestaurantRestController.REST_URL)
 public class RestaurantRestController {
-    static final String REST_URL = "/rest/restaurants/";
+    static final String REST_URL = "/rest/restaurants";
 
     final RestaurantRepository restaurantRepository;
 
@@ -35,25 +35,19 @@ public class RestaurantRestController {
         this.restaurantRepository = restaurantRepository;
     }
 
-//    @PostMapping("/{id}")
-//    public Vote vote(@PathVariable int id) {
-//        User user = userRepository.get(SecurityUtil.getAuthUser());
-//        Restaurant restaurant = restaurantRepository.get(id);
-//        Vote vote = new Vote(user, LocalDateTime.now(), restaurant);
-//        return voteRepository.save(vote);
-//    }
-
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public RestaurantTo get(@PathVariable int id) {
         return makeTo(restaurantRepository.get(id));
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<RestaurantTo> getAllToday() {
         return RestaurantUtil.makeTos(restaurantRepository.getAllToday());
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWithLocation(@RequestBody Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
         checkNew(restaurant);
@@ -62,7 +56,6 @@ public class RestaurantRestController {
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
-
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 

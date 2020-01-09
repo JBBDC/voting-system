@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,30 +18,44 @@ public class Vote extends AbstractBaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
+    @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
-    private LocalDateTime dateTime;
+    private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
-    public Vote(User user, LocalDateTime dateTime, Restaurant restaurant) {
+    public Vote(User user, Restaurant restaurant) {
         this.user = user;
-        this.dateTime = dateTime;
+        this.date = LocalDate.now();
+        this.restaurant = restaurant;
+    }
+
+    public Vote(User user, LocalDate date, Restaurant restaurant) {
+        this.user = user;
+        this.date = date;
+        this.restaurant = restaurant;
+    }
+
+    public Vote(int id, User user, LocalDate date, Restaurant restaurant) {
+        super(id);
+        this.user = user;
+        this.date = date;
         this.restaurant = restaurant;
     }
 
     public Vote() {
+        this.date = LocalDate.now();
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public User getUser() {

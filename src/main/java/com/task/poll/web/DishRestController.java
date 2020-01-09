@@ -16,15 +16,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 import static com.task.poll.util.DishUtil.makeTo;
+import static com.task.poll.util.DishUtil.makeTos;
 import static com.task.poll.util.ValidationUtil.assureIdConsistent;
 import static com.task.poll.util.ValidationUtil.checkNew;
 
 @RestController
 @RequestMapping(com.task.poll.web.DishRestController.REST_URL)
 public class DishRestController {
-    static final String REST_URL = "/rest/dishes/";
+    static final String REST_URL = "/rest/dishes";
 
     final CrudRestaurantRepository restaurantRepository;
 
@@ -36,13 +38,20 @@ public class DishRestController {
         this.dishRepository = dishRepository;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     public DishTo get(@PathVariable int id) {
         return makeTo(dishRepository.get(id));
     }
 
+    @GetMapping(value = "/history/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public List<DishTo> getAll(@PathVariable int restaurantId) {
+        return makeTos(dishRepository.getAll(restaurantId));
+    }
+
     @Transactional
-    @PostMapping(value = "/{restaurantId}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DishTo> createWithLocation(@RequestBody Dish dish, @PathVariable int restaurantId) {
         Assert.notNull(dish, "dish must not be null");
         checkNew(dish);

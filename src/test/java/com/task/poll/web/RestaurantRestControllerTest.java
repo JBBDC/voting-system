@@ -1,6 +1,5 @@
 package com.task.poll.web;
 
-import com.task.poll.DishTestData;
 import com.task.poll.RestaurantTestData;
 import com.task.poll.model.Restaurant;
 import com.task.poll.repository.RestaurantRepository;

@@ -9,17 +9,17 @@ CREATE SEQUENCE GLOBAL_SEQ START WITH 100000;
 
 CREATE TABLE users
 (
-    id               INTEGER DEFAULT GLOBAL_SEQ.nextval PRIMARY KEY,
-    name             VARCHAR(255)            NOT NULL,
-    email            VARCHAR(255)            NOT NULL,
-    password         VARCHAR(255)            NOT NULL,
-    registered       DATE DEFAULT now() NOT NULL,
-    enabled          BOOL DEFAULT TRUE       NOT NULL,
+    id         INTEGER DEFAULT GLOBAL_SEQ.nextval PRIMARY KEY,
+    name       VARCHAR(255)          NOT NULL,
+    email      VARCHAR(255)          NOT NULL,
+    password   VARCHAR(255)          NOT NULL,
+    registered DATE    DEFAULT now() NOT NULL,
+    enabled    BOOL    DEFAULT TRUE  NOT NULL,
 );
 CREATE UNIQUE INDEX users_unique_email_idx
     ON USERS (email);
 
-INSERT INTO USERS ( name, email, password)
+INSERT INTO USERS (name, email, password)
 VALUES ('User', 'user@yandex.ru', '{noop}password'),
        ('User2', 'user2@yandex.ru', '{noop}password'),
        ('Admin', 'admin@gmail.com', '{noop}password');
@@ -40,8 +40,8 @@ VALUES ('ROLE_USER', 100000),
 
 CREATE TABLE restaurants
 (
-    id     INTEGER DEFAULT GLOBAL_SEQ.nextval PRIMARY KEY,
-    name   VARCHAR(255)    NOT NULL
+    id   INTEGER DEFAULT GLOBAL_SEQ.nextval PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
 );
 
 INSERT INTO RESTAURANTS (NAME)
@@ -51,11 +51,11 @@ VALUES ('First restaurant'),
 
 CREATE TABLE dishes
 (
-    id          INTEGER DEFAULT GLOBAL_SEQ.nextval PRIMARY KEY,
-    name   VARCHAR(255)    NOT NULL,
-    price DECIMAL NOT NULL,
-    created     DATE DEFAULT now() NOT NULL,
-    restaurant_id     INTEGER      NOT NULL,
+    id            INTEGER DEFAULT GLOBAL_SEQ.nextval PRIMARY KEY,
+    name          VARCHAR(255)          NOT NULL,
+    price         DECIMAL               NOT NULL,
+    created       DATE    DEFAULT now() NOT NULL,
+    restaurant_id INTEGER               NOT NULL,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON DELETE CASCADE
 );
 
@@ -71,18 +71,21 @@ VALUES ('actual dish one', 10, now(), 100003),
 
 CREATE TABLE votes
 (
-    id          INTEGER DEFAULT GLOBAL_SEQ.nextval PRIMARY KEY,
-    user_id     INTEGER     NOT NULL,
-    date_time   TIMESTAMP DEFAULT now() NOT NULL,
-    restaurant_id   INTEGER     NOT NULL,
+    id            INTEGER DEFAULT GLOBAL_SEQ.nextval PRIMARY KEY,
+    user_id       INTEGER               NOT NULL,
+    date          DATE    DEFAULT now() NOT NULL,
+    restaurant_id INTEGER               NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON DELETE CASCADE
 );
+CREATE INDEX votes_user_idx
+    ON votes (user_id);
 
-INSERT INTO VOTES (USER_ID, DATE_TIME, RESTAURANT_ID)
-VALUES (100000, '2019-11-20 11:00:00', 100004),
-        (100000, now(), 100003),
-       (100001, '2019-11-20 11:00:00', 100004);
+INSERT INTO VOTES (USER_ID, DATE, RESTAURANT_ID)
+VALUES (100000, '2019-11-20', 100004),
+       (100000, now(), 100003),
+       (100002, '2019-11-20', 100004),
+       (100002, now(), 100005);
 
 
 

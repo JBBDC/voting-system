@@ -23,8 +23,8 @@ public class DishRepository {
         return repository.save(dish);
     }
 
-    public List<Dish> getAll(int restId, LocalDate created) {
-        return repository.getAllByRestaurantIdAndCreated(restId, created);
+    public List<Dish> getAll(int restId) {
+        return repository.getAllByRestaurantId(restId);
     }
 
     public Dish get(int id) {

@@ -49,7 +49,6 @@ public class User extends AbstractBaseEntity {
     @BatchSize(size = 200)
     private Set<Role> roles;
 
-
     public User() {
     }
 

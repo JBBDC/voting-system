@@ -2,6 +2,7 @@ package com.task.poll.repository;
 
 import com.task.poll.AuthorizedUser;
 import com.task.poll.model.User;
+import com.task.poll.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +34,7 @@ public class UserRepository {
     }
 
     public User get(int id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("id = " + id));
     }
 
     public User getByEmail(String email) {
