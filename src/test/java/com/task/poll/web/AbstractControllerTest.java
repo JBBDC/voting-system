@@ -77,12 +77,20 @@ abstract public class AbstractControllerTest {
         return doGet("{id}", id);
     }
 
+    protected RequestWrapper doGet(int prefix, int id) {
+        return doGet("{id}", id);
+    }
+
     protected RequestWrapper doDelete() {
         return wrap(MockMvcRequestBuilders.delete(url));
     }
 
     protected RequestWrapper doDelete(int id) {
         return wrap(MockMvcRequestBuilders.delete(url + "{id}", id));
+    }
+
+    protected RequestWrapper doDelete(String urlTemplate, Object... uriVars) {
+        return wrap(MockMvcRequestBuilders.delete(url + urlTemplate, uriVars));
     }
 
     protected RequestWrapper doPut() {
@@ -93,9 +101,18 @@ abstract public class AbstractControllerTest {
         return wrap(MockMvcRequestBuilders.put(url + "{id}", id));
     }
 
+    protected RequestWrapper doPut(String urlTemplate, Object... uriVars) {
+        return wrap(MockMvcRequestBuilders.put(url + urlTemplate, uriVars));
+    }
+
     protected RequestWrapper doPost(String pad) throws Exception {
         return wrap(MockMvcRequestBuilders.post(url + pad));
     }
+
+    protected RequestWrapper doPost(String urlTemplate, Object... uriVars) throws Exception {
+        return wrap(MockMvcRequestBuilders.post(url + urlTemplate, uriVars));
+    }
+
     protected RequestWrapper doPost(int pad) throws Exception {
         return doPost(String.valueOf(pad));
     }
@@ -142,10 +159,6 @@ abstract public class AbstractControllerTest {
             builder.with(SecurityMockMvcRequestPostProcessors.authentication(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())));
             return this;
         }
-    }
-
-    public ResultMatcher errorType(ErrorType type) {
-        return jsonPath("$.type").value(type.name());
     }
 
 

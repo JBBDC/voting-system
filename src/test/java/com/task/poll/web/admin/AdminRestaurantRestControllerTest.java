@@ -1,9 +1,12 @@
-package com.task.poll.web;
+package com.task.poll.web.admin;
 
 import com.task.poll.RestaurantTestData;
 import com.task.poll.model.Restaurant;
 import com.task.poll.repository.RestaurantRepository;
+import com.task.poll.to.RestaurantTo;
 import com.task.poll.util.exception.NotFoundException;
+import com.task.poll.web.AbstractControllerTest;
+import com.task.poll.web.admin.AdminRestaurantRestController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,35 +15,32 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.List;
-
 import static com.task.poll.DishTestData.*;
 import static com.task.poll.RestaurantTestData.*;
 import static com.task.poll.TestUtil.readFromJson;
 import static com.task.poll.UserTestData.*;
 import static com.task.poll.util.RestaurantUtil.makeTo;
-import static com.task.poll.util.RestaurantUtil.makeTos;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class RestaurantRestControllerTest extends AbstractControllerTest {
+class AdminRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Autowired
     RestaurantRepository repository;
 
-    public RestaurantRestControllerTest() {
-        super(RestaurantRestController.REST_URL);
+    public AdminRestaurantRestControllerTest() {
+        super(AdminRestaurantRestController.REST_URL);
     }
 
     @Test
-    void getAllWithMenu() throws Exception {
-        perform(doGet().basicAuth(USER))
+    void getAll() throws Exception {
+        perform(doGet().basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(RESTS_TO_MATCHERS.contentJson(makeTos(List.of(REST_1_ACTUAL_DISHES, REST_2_ACTUAL_DISHES), USER_ID)));
+                .andExpect(RESTS_MATCHERS.contentJson(REST_1, REST_2, REST_3));
     }
 
     @Test
@@ -52,16 +52,25 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void get() throws Exception {
-        perform(doGet(REST_1_ID).basicAuth(USER))
+        perform(doGet(REST_1_ID).basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(RESTS_TO_MATCHERS.contentJson(makeTo(REST_1, USER_ID)));
+                .andExpect(RESTS_TO_MATCHERS.contentJson(makeTo(REST_1)));
+    }
+
+    @Test
+    void getByName() throws Exception {
+        perform(doGet("/by?name=Diner without dishes").basicAuth(ADMIN))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(RESTS_TO_MATCHERS.contentJson(makeTo(REST_3)));
     }
 
     @Test
     void getNotFound() throws Exception {
-        perform(doGet(NOT_EXISTED_ID).basicAuth(USER))
+        perform(doGet(NOT_EXISTED_ID).basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
@@ -69,19 +78,29 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     void createWithLocation() throws Exception {
         Restaurant newRest = RestaurantTestData.getCreated();
-        ResultActions action = perform(doPost().jsonBody(newRest).basicAuth(ADMIN));
+        ResultActions action = perform(doPost().jsonBody(newRest).basicAuth(ADMIN))
+                .andDo(print());
 
-        Restaurant created = readFromJson(action, Restaurant.class);
+        RestaurantTo created = readFromJson(action, RestaurantTo.class);
         Integer newId = created.getId();
         newRest.setId(newId);
-        RESTS_MATCHERS.assertMatch(created, newRest);
+        RESTS_TO_MATCHERS.assertMatch(created, makeTo(newRest));
         RESTS_MATCHERS.assertMatch(repository.get(newId), newRest);
+    }
+
+    @Test
+    void createEmptyName() throws Exception {
+        Restaurant newRest = new Restaurant("");
+        perform(doPost().jsonBody(newRest).basicAuth(ADMIN))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
     void update() throws Exception {
         Restaurant updated = RestaurantTestData.getUpdated();
         perform(doPut(REST_1_ID).jsonBody(updated).basicAuth(ADMIN))
+                .andDo(print())
                 .andExpect(status().isNoContent());
         RESTS_MATCHERS.assertMatch(repository.get(REST_1_ID), updated);
     }
@@ -105,6 +124,7 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     void delete() throws Exception {
         perform(doDelete(REST_1_ID).basicAuth(ADMIN))
+                .andDo(print())
                 .andExpect(status().isNoContent());
         Assertions.assertThrows(NotFoundException.class, () -> repository.get(REST_1_ID));
     }
@@ -112,6 +132,7 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     void deleteNotFound() throws Exception {
         perform(doDelete(NOT_EXISTED_ID).basicAuth(ADMIN))
+                .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
 }

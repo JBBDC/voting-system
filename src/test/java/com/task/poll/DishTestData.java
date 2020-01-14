@@ -1,13 +1,12 @@
 package com.task.poll;
 
 import com.task.poll.model.Dish;
-import com.task.poll.model.Restaurant;
 import com.task.poll.to.DishTo;
-import com.task.poll.to.RestaurantTo;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-import static com.task.poll.RestaurantTestData.*;
+import static com.task.poll.util.DishUtil.makeTos;
 
 public class DishTestData {
     public static int DISH_1_ID = 100006;
@@ -24,11 +23,15 @@ public class DishTestData {
     public static Dish getCreated() {
         return new Dish("new Dish", BigDecimal.valueOf(22));
     }
+
     public static Dish getUpdated() {
         Dish updated = new Dish(DISH_1);
         updated.setName("updated name");
         return updated;
     }
+
+    public static List<DishTo> REST_1_DISHES = makeTos(DISH_1, DISH_2, DISH_3);
+    public static List<DishTo> REST_2_DISHES = makeTos(DISH_4, DISH_5, DISH_6);
 
     public static TestMatchers<DishTo> DISH_TO_MATCHERS = TestMatchers.useEquals(DishTo.class);
     public static TestMatchers<Dish> DISH_MATCHERS = TestMatchers.useFieldsComparator(Dish.class, "restaurant", "created");

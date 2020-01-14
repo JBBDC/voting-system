@@ -10,11 +10,11 @@ CREATE SEQUENCE GLOBAL_SEQ START WITH 100000;
 CREATE TABLE users
 (
     id         INTEGER DEFAULT GLOBAL_SEQ.nextval PRIMARY KEY,
-    name       VARCHAR(255)          NOT NULL,
-    email      VARCHAR(255)          NOT NULL,
-    password   VARCHAR(255)          NOT NULL,
-    registered DATE    DEFAULT now() NOT NULL,
-    enabled    BOOL    DEFAULT TRUE  NOT NULL,
+    name       VARCHAR(255)                 NOT NULL,
+    email      VARCHAR(255)                 NOT NULL,
+    password   VARCHAR(255)                 NOT NULL,
+    registered DATE    DEFAULT CURRENT_DATE NOT NULL,
+    enabled    BOOL    DEFAULT TRUE         NOT NULL
 );
 CREATE UNIQUE INDEX users_unique_email_idx
     ON USERS (email);
@@ -41,21 +41,21 @@ VALUES ('ROLE_USER', 100000),
 CREATE TABLE restaurants
 (
     id   INTEGER DEFAULT GLOBAL_SEQ.nextval PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL UNIQUE,
 );
 
 INSERT INTO RESTAURANTS (NAME)
-VALUES ('First restaurant'),
-       ('Second restaurant'),
+VALUES ('First'),
+       ('Second'),
        ('Diner without dishes');
 
 CREATE TABLE dishes
 (
     id            INTEGER DEFAULT GLOBAL_SEQ.nextval PRIMARY KEY,
-    name          VARCHAR(255)          NOT NULL,
-    price         DECIMAL               NOT NULL,
-    created       DATE    DEFAULT now() NOT NULL,
-    restaurant_id INTEGER               NOT NULL,
+    name          VARCHAR(255)                 NOT NULL,
+    price         DECIMAL                      NOT NULL,
+    created       DATE    DEFAULT CURRENT_DATE NOT NULL,
+    restaurant_id INTEGER                      NOT NULL,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON DELETE CASCADE
 );
 

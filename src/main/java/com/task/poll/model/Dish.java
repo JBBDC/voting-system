@@ -1,25 +1,43 @@
 package com.task.poll.model;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "dishes")
 public class Dish extends AbstractBaseEntity {
 
+    @Column(name = "name")
+    @NotBlank
+    @Size(min = 2, max = 50)
+    private String name;
+
+    @Column(name = "price")
+    @NotNull
+    @Range(min = 0, max = Integer.MAX_VALUE)
+    private BigDecimal price;
+
+    @Column(name = "created", nullable = false, columnDefinition = "timestamp default CURRENT_DATE")
+    private LocalDate created = LocalDate.now();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Restaurant restaurant;
+
     public Dish() {
     }
 
     public Dish(Dish copy) {
-        this(copy.getId(),copy.getName(),copy.getPrice());
+        this(copy.getId(), copy.getName(), copy.getPrice());
     }
 
     public Dish(String name, BigDecimal price, Restaurant restaurant) {
@@ -34,27 +52,10 @@ public class Dish extends AbstractBaseEntity {
         this.price = price;
     }
 
-    public Dish( String name, BigDecimal price) {
+    public Dish(String name, BigDecimal price) {
         this.name = name;
         this.price = price;
     }
-
-    @Column(name = "name")
-    @NotBlank
-    private String name;
-
-    @Column(name = "price")
-    @NotNull
-    private BigDecimal price;
-
-    @Column(name = "created", nullable = false)
-    @NotNull
-    private LocalDate created;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Restaurant restaurant;
 
     public String getName() {
         return name;

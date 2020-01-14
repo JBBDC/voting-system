@@ -22,7 +22,7 @@ public class RestaurantRepository {
     public Restaurant save(Restaurant restaurant) {
         if (!restaurant.isNew()) {
             int id = restaurant.getId();
-            Restaurant existed = repository.get(id).orElseThrow(() -> new NotFoundException("id = " + id));
+            Restaurant existed = repository.get(id).orElseThrow(() -> new NotFoundException("not found restaurant with id = " + id));
             if (restaurant.getMenu() == null) {
                 restaurant.setMenu(existed.getMenu());
             }
@@ -38,12 +38,19 @@ public class RestaurantRepository {
     }
 
     public Restaurant get(int id) throws NotFoundException {
-        return repository.get(id).orElseThrow(() -> new NotFoundException("id = " + id));
+        return repository.get(id).orElseThrow(() -> new NotFoundException("not found restaurant with id = " + id));
+    }
+
+    public Restaurant getByName(String name) throws NotFoundException {
+        return repository.getByName(name).orElseThrow(() -> new NotFoundException("not found restaurant with name = " + name));
     }
 
     public List<Restaurant> getAllToday() {
         return repository.getAllToday();
     }
 
+    public List<Restaurant> getAll() {
+        return repository.getAll();
+    }
 
 }

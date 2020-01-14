@@ -10,8 +10,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.task.poll.util.ValidationUtil.*;
-
 public class DishUtil {
     public static List<DishTo> makeTos(Restaurant restaurant) {
         if (restaurant != null && restaurant.getMenu() != null) {
@@ -20,8 +18,12 @@ public class DishUtil {
         return new ArrayList<>();
     }
 
+    public static List<DishTo> makeTos(Dish... dishes) {
+        return makeTos(List.of(dishes));
+    }
+
     public static List<DishTo> makeTos(List<Dish> dishes) {
-        if(dishes != null) {
+        if (dishes != null) {
             return dishes.stream()
                     .map(d -> new DishTo(d.getId(), d.getName(), d.getPrice()))
                     .sorted(Comparator.comparingInt(BaseTo::getId).reversed())

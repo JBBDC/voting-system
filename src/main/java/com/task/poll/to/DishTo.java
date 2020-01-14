@@ -1,10 +1,7 @@
 package com.task.poll.to;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.beans.ConstructorProperties;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class DishTo extends BaseTo {
@@ -18,7 +15,6 @@ public class DishTo extends BaseTo {
         super(id);
         this.name = name;
         this.price = price;
-
     }
 
     public String getName() {
@@ -29,7 +25,6 @@ public class DishTo extends BaseTo {
         return price;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -37,7 +32,6 @@ public class DishTo extends BaseTo {
         DishTo dishTo = (DishTo) o;
         return name.equals(dishTo.name) &&
                 price.equals(dishTo.price);
-
     }
 
     @Override

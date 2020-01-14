@@ -1,7 +1,6 @@
 package com.task.poll.util;
 
 import com.task.poll.model.AbstractBaseEntity;
-import com.task.poll.util.exception.ErrorType;
 import com.task.poll.util.exception.IllegalRequestDataException;
 import com.task.poll.util.exception.NotFoundException;
 import org.slf4j.Logger;
@@ -40,12 +39,6 @@ public class ValidationUtil {
         }
     }
 
-    public static void checkNotNew(AbstractBaseEntity bean) {
-        if (bean.isNew()) {
-            throw new IllegalRequestDataException(bean + " must not be new (id=" + bean.getId() + ")");
-        }
-    }
-
     public static void assureIdConsistent(AbstractBaseEntity bean, int id) {
 //      conservative when you reply, but accept liberally (http://stackoverflow.com/a/32728226/548473)
         if (bean.isNew()) {
@@ -55,12 +48,18 @@ public class ValidationUtil {
         }
     }
 
-    public static Throwable logAndGetRootCause(Logger log, HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
+    public static void checkId(AbstractBaseEntity bean, int id) {
+        if (bean.isNew() || bean.getId() != id) {
+            throw new IllegalRequestDataException(bean + " must be with id=" + id);
+        }
+    }
+
+    public static Throwable logAndGetRootCause(Logger log, HttpServletRequest req, Exception e, boolean logException) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         if (logException) {
-            log.error(errorType + " at request " + req.getRequestURL(), rootCause);
+            log.error(rootCause + " at request " + req.getRequestURL(), rootCause);
         } else {
-            log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
+            log.warn("{} at request  {}", req.getRequestURL(), rootCause.toString());
         }
         return rootCause;
     }

@@ -1,18 +1,15 @@
 package com.task.poll.model;
 
-import org.apache.tomcat.jni.Local;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.validator.constraints.SafeHtml;
-import org.springframework.lang.Nullable;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -38,9 +35,9 @@ public class User extends AbstractBaseEntity {
     @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
     private boolean enabled = true;
 
-    @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
-    @NotNull
-    private LocalDate registered;
+    @Column(name = "registered", insertable = false, updatable = false, nullable = false, columnDefinition = "date default CURRENT_DATE")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDate registered = LocalDate.now();
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -126,10 +123,6 @@ public class User extends AbstractBaseEntity {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
     @Override
