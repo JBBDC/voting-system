@@ -4,6 +4,7 @@ import com.task.poll.model.Restaurant;
 import com.task.poll.to.RestaurantTo;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ public class RestaurantUtil {
         assert restaurants != null;
         return restaurants.stream()
                 .map(RestaurantUtil::makeTo)
+                .sorted(Comparator.comparing(RestaurantTo::getName))
                 .collect(Collectors.toList());
     }
 

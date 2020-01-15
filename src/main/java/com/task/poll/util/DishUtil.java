@@ -26,7 +26,7 @@ public class DishUtil {
         if (dishes != null) {
             return dishes.stream()
                     .map(d -> new DishTo(d.getId(), d.getName(), d.getPrice()))
-                    .sorted(Comparator.comparingInt(BaseTo::getId).reversed())
+                    .sorted(Comparator.comparing(DishTo::getName))
                     .collect(Collectors.toList());
         }
         return new ArrayList<>();

@@ -6,12 +6,9 @@ import com.task.poll.repository.RestaurantRepository;
 import com.task.poll.to.RestaurantTo;
 import com.task.poll.util.exception.NotFoundException;
 import com.task.poll.web.AbstractControllerTest;
-import com.task.poll.web.admin.AdminRestaurantRestController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -23,8 +20,6 @@ import static com.task.poll.util.RestaurantUtil.makeTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@AutoConfigureMockMvc
-@SpringBootTest
 class AdminRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Autowired
@@ -40,7 +35,7 @@ class AdminRestaurantRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(RESTS_MATCHERS.contentJson(REST_1, REST_2, REST_3));
+                .andExpect(RESTS_MATCHERS.contentJson(REST_3, REST_1, REST_2));
     }
 
     @Test

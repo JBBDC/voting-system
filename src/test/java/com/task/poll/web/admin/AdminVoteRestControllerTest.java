@@ -1,10 +1,7 @@
 package com.task.poll.web.admin;
 
 import com.task.poll.web.AbstractControllerTest;
-import com.task.poll.web.admin.AdminVoteRestController;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
 import java.util.List;
@@ -17,8 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@AutoConfigureMockMvc
-@SpringBootTest
 class AdminVoteRestControllerTest extends AbstractControllerTest {
 
     AdminVoteRestControllerTest() {
@@ -31,7 +26,7 @@ class AdminVoteRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(VOTE_TO_MATCHERS.contentJson(makeTos(List.of(USER_VOTE_1, USER_VOTE_2, ADMIN_VOTE_1, ADMIN_VOTE_2))));
+                .andExpect(VOTE_TO_MATCHERS.contentJson(makeTos(List.of(ADMIN_VOTE_2, USER_VOTE_2, USER_VOTE_1, ADMIN_VOTE_1))));
     }
 
     @Test
@@ -40,6 +35,6 @@ class AdminVoteRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(VOTE_TO_MATCHERS.contentJson(makeTos(List.of(USER_VOTE_2, ADMIN_VOTE_2))));
+                .andExpect(VOTE_TO_MATCHERS.contentJson(makeTos(List.of(ADMIN_VOTE_2, USER_VOTE_2))));
     }
 }

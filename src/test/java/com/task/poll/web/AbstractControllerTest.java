@@ -4,6 +4,8 @@ import com.task.poll.model.User;
 import com.task.poll.util.exception.ErrorType;
 import com.task.poll.web.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -23,6 +25,8 @@ import javax.annotation.PostConstruct;
 import static com.task.poll.web.AbstractControllerTest.RequestWrapper.wrap;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+@AutoConfigureMockMvc
+@SpringBootTest
 @Transactional
 abstract public class AbstractControllerTest {
 

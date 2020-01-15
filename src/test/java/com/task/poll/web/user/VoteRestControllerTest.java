@@ -7,8 +7,6 @@ import com.task.poll.repository.VoteRepository;
 import com.task.poll.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
 import java.time.*;
@@ -23,8 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
-@SpringBootTest
 class VoteRestControllerTest extends AbstractControllerTest {
 
     @Autowired
@@ -63,16 +59,16 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getToday() throws Exception {
-        perform(doGet("/vote").basicAuth(USER))
+        perform(doGet("/vote").basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(VOTE_TO_MATCHERS.contentJson(makeTo(USER_VOTE_2)));
+                .andExpect(VOTE_TO_MATCHERS.contentJson(makeTo(ADMIN_VOTE_2)));
     }
 
     @Test
     void vote() throws Exception {
-        perform(doPost("/vote/{restaurantId}", RestaurantTestData.REST_1_ID).basicAuth(USER2))
+        perform(doPost("/vote/{restaurantId}", RestaurantTestData.REST_1_ID).basicAuth(USER))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
@@ -91,22 +87,22 @@ class VoteRestControllerTest extends AbstractControllerTest {
     void revoteBeforeExpired() throws Exception {
         Vote updated = VoteTestData.getUpdated();
         VoteRestController.EXPIRED = LocalTime.now().plus(5, ChronoUnit.MINUTES);
-        perform(doPost("/vote/{restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(USER))
+        perform(doPost("/vote/{restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(VOTE_TO_MATCHERS.contentJson(makeTo(updated)));
-        VOTE_TO_MATCHERS.assertMatch(makeTos(repository.getAllByUser(USER_ID)), makeTos(USER_VOTE_1, updated));
+        VOTE_TO_MATCHERS.assertMatch(makeTos(repository.getAllByUser(ADMIN_ID)), makeTos(ADMIN_VOTE_1, updated));
     }
 
     @Test
     void revoteAfterExpired() throws Exception {
         VoteRestController.EXPIRED = LocalTime.now().minus(5, ChronoUnit.MINUTES);
-        perform(doPost("/vote/{restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(USER))
+        perform(doPost("/vote/{restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(VOTE_TO_MATCHERS.contentJson(makeTo(USER_VOTE_2)));
-        VOTE_TO_MATCHERS.assertMatch(makeTos(repository.getAllByUser(USER_ID)), makeTos(USER_VOTE_1, USER_VOTE_2));
+                .andExpect(VOTE_TO_MATCHERS.contentJson(makeTo(ADMIN_VOTE_2)));
+        VOTE_TO_MATCHERS.assertMatch(makeTos(repository.getAllByUser(ADMIN_ID)), makeTos(ADMIN_VOTE_1, ADMIN_VOTE_2));
     }
 }
