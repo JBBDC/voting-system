@@ -33,23 +33,23 @@ Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk
 
 - **GET restaurants with menu for today:** 
 
-  ```
+```
   curl 'http://localhost:8080/api/v1/restaurants' -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ='
-  ```
+```
 
 - **Vote for restaurant with id 100004:** 
 
-   ```
+ ```
    curl 'http://localhost:8080/api/v1/vote/100004' -i -X POST -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ=' -H "Content-Type: application/json"
-   ```
+ ```
 
 - **GET votes history for user:** 
 
-  ```
+```
   curl 'http://localhost:8080/api/v1/votes' -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ='
   
   curl 'http://localhost:8080/api/v1/votes?startDate=2019-10-21&endDate=2020-12-31' -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ='
-  ```
+```
 
   
 
