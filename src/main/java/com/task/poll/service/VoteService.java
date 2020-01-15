@@ -46,9 +46,6 @@ public class VoteService {
     }
 
     public Vote getByDateAndUser(LocalDate date) {
-        if (date == null) {
-            date = LocalDate.now();
-        }
         return repository.getByDateAndUserId(date, SecurityUtil.authUserId()).orElse(null);
     }
 

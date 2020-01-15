@@ -13,7 +13,25 @@ Voting system for deciding where to have lunch.
 
 Each restaurant provides new menu each day.
 
+  **Stack:**
+- Spring Boot
+- Spring Data JPA
 
+### Install:
+```
+$ git clone https://github.com/JBBDC/voting-system
+```
+
+### Run:
+```
+$ mvn spring-boot:run
+```
+or
+
+```
+$ mvn clean package
+$ java -Dfile.encoding=UTF8 -jar target/task-0.0.1-SNAPSHOT.jar
+```
 
 ### Credentials:
 
@@ -86,7 +104,7 @@ curl 'http://localhost:8080/api/v1/admin/restaurants' -H 'Authorization: Basic Y
 curl 'http://localhost:8080/api/v1/admin/restaurants/100004' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
 curl 'http://localhost:8080/api/v1/admin/restaurants/by?name=First' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
 curl 'http://localhost:8080/api/v1/admin/restaurants' -i -d '{"name" : "NewOne"}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-curl 'http://localhost:8080/api/v1/admin/restaurants/100003' -i -X PUT -d '{"name" : "UpdatedName"}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
+curl 'http://localhost:8080/api/v1/admin/restaurants/100003' -i -X PUT -d '{"id":"100003","name" : "UpdatedName"}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
 curl 'http://localhost:8080/api/v1/admin/restaurants/100004' -i -X DELETE -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
 ```
 

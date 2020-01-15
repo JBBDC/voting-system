@@ -36,7 +36,7 @@ public class UserServiceDetails implements UserDetailsService {
 
     public void delete(int id) {
         if (repository.delete(id) == 0) {
-            throw new NotFoundException("not found restaurant with id = " + id);
+            throw new NotFoundException("not found user with id = " + id);
         }
     }
 
