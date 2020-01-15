@@ -1,9 +1,7 @@
 package com.task.poll.web.user;
 
-import com.task.poll.repository.RestaurantRepository;
 import com.task.poll.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import java.util.List;
@@ -17,9 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 class RestaurantRestControllerTest extends AbstractControllerTest {
-
-    @Autowired
-    RestaurantRepository repository;
 
     public RestaurantRestControllerTest() {
         super(RestaurantRestController.REST_URL);

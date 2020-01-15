@@ -4,7 +4,7 @@ import com.task.poll.TestUtil;
 import com.task.poll.UserTestData;
 import com.task.poll.model.Role;
 import com.task.poll.model.User;
-import com.task.poll.repository.UserRepository;
+import com.task.poll.service.UserServiceDetails;
 import com.task.poll.util.exception.NotFoundException;
 import com.task.poll.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AdminRestControllerTest extends AbstractControllerTest {
 
     @Autowired
-    private UserRepository userService;
+    private UserServiceDetails userService;
 
     AdminRestControllerTest() {
         super(AdminRestController.REST_URL);

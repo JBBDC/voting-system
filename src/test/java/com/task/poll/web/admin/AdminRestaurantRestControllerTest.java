@@ -2,7 +2,7 @@ package com.task.poll.web.admin;
 
 import com.task.poll.RestaurantTestData;
 import com.task.poll.model.Restaurant;
-import com.task.poll.repository.RestaurantRepository;
+import com.task.poll.service.RestaurantService;
 import com.task.poll.to.RestaurantTo;
 import com.task.poll.util.exception.NotFoundException;
 import com.task.poll.web.AbstractControllerTest;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AdminRestaurantRestControllerTest extends AbstractControllerTest {
 
     @Autowired
-    RestaurantRepository repository;
+    RestaurantService repository;
 
     public AdminRestaurantRestControllerTest() {
         super(AdminRestaurantRestController.REST_URL);

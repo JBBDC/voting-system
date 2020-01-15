@@ -3,8 +3,8 @@ package com.task.poll.web.user;
 import com.task.poll.model.Restaurant;
 import com.task.poll.model.Vote;
 import com.task.poll.repository.CrudUserRepository;
-import com.task.poll.repository.RestaurantRepository;
-import com.task.poll.repository.VoteRepository;
+import com.task.poll.service.RestaurantService;
+import com.task.poll.service.VoteService;
 import com.task.poll.to.VoteTo;
 import com.task.poll.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +29,14 @@ public class VoteRestController {
     public static LocalTime EXPIRED = LocalTime.of(11, 0, 0);
     static final String REST_URL = "/api/v1/";
 
-    private final VoteRepository voteRepository;
-    private final RestaurantRepository restaurantRepository;
+    private final VoteService voteService;
+    private final RestaurantService restaurantService;
     private final CrudUserRepository userRepository;
 
     @Autowired
-    public VoteRestController(VoteRepository voteRepository, RestaurantRepository restaurantRepository, CrudUserRepository userRepository) {
-        this.voteRepository = voteRepository;
-        this.restaurantRepository = restaurantRepository;
+    public VoteRestController(VoteService voteService, RestaurantService restaurantService, CrudUserRepository userRepository) {
+        this.voteService = voteService;
+        this.restaurantService = restaurantService;
         this.userRepository = userRepository;
     }
 
@@ -44,7 +44,7 @@ public class VoteRestController {
     @ResponseStatus(HttpStatus.OK)
     public List<VoteTo> getBetween(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                    @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return makeTos(voteRepository.getByUserBetweenDates(SecurityUtil.authUserId(), startDate, endDate));
+        return makeTos(voteService.getByUserBetweenDates(SecurityUtil.authUserId(), startDate, endDate));
     }
 
     @GetMapping(value = "/vote", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,13 +53,13 @@ public class VoteRestController {
         if (date == null) {
             date = LocalDate.now();
         }
-        return makeTo(checkNotFound(voteRepository.getByDateAndUser(date, SecurityUtil.authUserId()), "No vote for date " + date));
+        return makeTo(checkNotFound(voteService.getByDateAndUser(date, SecurityUtil.authUserId()), "No vote for date " + date));
     }
 
     @Transactional
     @PostMapping(value = "vote/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<VoteTo> vote(@PathVariable int restaurantId) {
-        Restaurant restaurant = restaurantRepository.get(restaurantId);
+        Restaurant restaurant = restaurantService.get(restaurantId);
         Vote vote = new Vote();
         Vote existed = getExisted();
         HttpStatus status = HttpStatus.CREATED;
@@ -73,10 +73,10 @@ public class VoteRestController {
         }
         vote.setRestaurant(restaurant);
         vote.setUser(userRepository.getOne(SecurityUtil.authUserId()));
-        return new ResponseEntity<>(makeTo(voteRepository.save(vote)), status);
+        return new ResponseEntity<>(makeTo(voteService.save(vote)), status);
     }
 
     private Vote getExisted() {
-        return voteRepository.getByDateAndUser(LocalDate.now(), SecurityUtil.authUserId());
+        return voteService.getByDateAndUser(LocalDate.now(), SecurityUtil.authUserId());
     }
 }

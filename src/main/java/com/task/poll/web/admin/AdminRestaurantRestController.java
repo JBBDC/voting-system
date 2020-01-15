@@ -1,7 +1,7 @@
 package com.task.poll.web.admin;
 
 import com.task.poll.model.Restaurant;
-import com.task.poll.repository.RestaurantRepository;
+import com.task.poll.service.RestaurantService;
 import com.task.poll.to.RestaurantTo;
 import com.task.poll.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,37 +24,37 @@ import static com.task.poll.util.ValidationUtil.*;
 public class AdminRestaurantRestController {
     static final String REST_URL = "/api/v1/admin/restaurants";
 
-    final RestaurantRepository restaurantRepository;
+    final RestaurantService restaurantService;
 
     @Autowired
-    public AdminRestaurantRestController(RestaurantRepository restaurantRepository) {
-        this.restaurantRepository = restaurantRepository;
+    public AdminRestaurantRestController(RestaurantService restaurantService) {
+        this.restaurantService = restaurantService;
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RestaurantTo get(@PathVariable int id) {
-        return makeTo(restaurantRepository.get(id));
+        return makeTo(restaurantService.get(id));
     }
 
     @GetMapping("/by")
     @ResponseStatus(HttpStatus.OK)
     public RestaurantTo get(@RequestParam("name") String name) {
-        return makeTo(restaurantRepository.getByName(name));
+        return makeTo(restaurantService.getByName(name));
     }
 
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<RestaurantTo> getAll() {
-        return (makeTos(restaurantRepository.getAll()));
+        return (makeTos(restaurantService.getAll()));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RestaurantTo> createWithLocation(@RequestBody @Valid Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
         checkNew(restaurant);
-        Restaurant created = restaurantRepository.save(restaurant);
+        Restaurant created = restaurantService.save(restaurant);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -67,13 +67,13 @@ public class AdminRestaurantRestController {
     public void update(@RequestBody @Valid Restaurant restaurant, @PathVariable int id) {
         Assert.notNull(restaurant, "restaurant must not be null");
         checkId(restaurant, id);
-        restaurantRepository.save(restaurant);
+        restaurantService.save(restaurant);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        if (!restaurantRepository.delete(id)) {
+        if (!restaurantService.delete(id)) {
             throw new NotFoundException("not found restaurant with id = " + id);
         }
     }

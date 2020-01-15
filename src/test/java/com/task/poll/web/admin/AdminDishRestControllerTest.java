@@ -3,7 +3,7 @@ package com.task.poll.web.admin;
 import com.task.poll.DishTestData;
 import com.task.poll.TestUtil;
 import com.task.poll.model.Dish;
-import com.task.poll.repository.DishRepository;
+import com.task.poll.service.DishService;
 import com.task.poll.to.DishTo;
 import com.task.poll.util.exception.NotFoundException;
 import com.task.poll.web.AbstractControllerTest;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AdminDishRestControllerTest extends AbstractControllerTest {
 
     @Autowired
-    DishRepository repository;
+    DishService repository;
 
     public AdminDishRestControllerTest() {
         super(AdminDishRestController.REST_URL);

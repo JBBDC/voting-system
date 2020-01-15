@@ -1,10 +1,12 @@
-package com.task.poll.repository;
+package com.task.poll.service;
 
 import com.task.poll.model.Dish;
+import com.task.poll.repository.CrudDishRepository;
+import com.task.poll.repository.CrudRestaurantRepository;
 import com.task.poll.util.exception.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -13,19 +15,19 @@ import java.util.List;
 import static com.task.poll.util.DateTimeUtil.getEndIfNull;
 import static com.task.poll.util.DateTimeUtil.getStartIfNull;
 
-@Repository
-public class DishRepository {
+@Service
+public class DishService {
 
     private CrudDishRepository repository;
     private CrudRestaurantRepository restaurantRepository;
 
-    @Autowired
-    public DishRepository(CrudDishRepository repository, CrudRestaurantRepository restaurantRepository) {
+    public DishService(CrudDishRepository repository, CrudRestaurantRepository restaurantRepository) {
         this.repository = repository;
         this.restaurantRepository = restaurantRepository;
     }
 
     @Transactional
+    @CacheEvict("restaurants")
     public Dish save(int restaurantId, Dish dish) {
         if (!dish.isNew()) {
             repository.getByIdAndRestaurant(restaurantId, dish.getId())
@@ -50,6 +52,7 @@ public class DishRepository {
         return repository.getByIdAndRestaurant(restaurantId, id).orElseThrow(() -> new NotFoundException("not found dish with id = " + id + "and restaurantId = " + restaurantId));
     }
 
+    @CacheEvict("restaurants")
     public boolean delete(int restaurantId, int id) {
         return repository.delete(restaurantId, id) != 0;
     }

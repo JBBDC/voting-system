@@ -1,22 +1,22 @@
-package com.task.poll.repository;
+package com.task.poll.service;
 
 import com.task.poll.model.Vote;
+import com.task.poll.repository.CrudVoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.task.poll.util.DateTimeUtil.*;
+import static com.task.poll.util.DateTimeUtil.getEndIfNull;
+import static com.task.poll.util.DateTimeUtil.getStartIfNull;
 
-@Repository
-public class VoteRepository {
-
+@Service
+public class VoteService {
     private CrudVoteRepository repository;
 
-    @Autowired
-    public VoteRepository(CrudVoteRepository repository) {
+    public VoteService(CrudVoteRepository repository) {
         this.repository = repository;
     }
 

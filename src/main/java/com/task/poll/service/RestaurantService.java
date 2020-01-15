@@ -1,24 +1,27 @@
-package com.task.poll.repository;
+package com.task.poll.service;
 
 import com.task.poll.model.Restaurant;
+import com.task.poll.repository.CrudRestaurantRepository;
 import com.task.poll.util.exception.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Repository
-public class RestaurantRepository {
+@Service
+public class RestaurantService {
 
-    private CrudRestaurantRepository repository;
+    final CrudRestaurantRepository repository;
 
-    @Autowired
-    public RestaurantRepository(CrudRestaurantRepository repository) {
+    public RestaurantService(CrudRestaurantRepository repository) {
         this.repository = repository;
     }
 
     @Transactional
+    @CachePut(value = "restaurants", key = "#restaurant.name")
     public Restaurant save(Restaurant restaurant) {
         if (!restaurant.isNew()) {
             int id = restaurant.getId();
@@ -33,6 +36,7 @@ public class RestaurantRepository {
         return repository.save(restaurant);
     }
 
+    @CacheEvict("restaurants")
     public boolean delete(int id) throws NotFoundException {
         return repository.delete(id) != 0;
     }
@@ -45,6 +49,7 @@ public class RestaurantRepository {
         return repository.getByName(name).orElseThrow(() -> new NotFoundException("not found restaurant with name = " + name));
     }
 
+    @Cacheable("restaurants")
     public List<Restaurant> getAllToday() {
         return repository.getAllToday();
     }
@@ -52,5 +57,6 @@ public class RestaurantRepository {
     public List<Restaurant> getAll() {
         return repository.getAll();
     }
+
 
 }

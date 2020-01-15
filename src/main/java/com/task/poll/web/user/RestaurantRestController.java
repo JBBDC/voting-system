@@ -1,6 +1,6 @@
 package com.task.poll.web.user;
 
-import com.task.poll.repository.RestaurantRepository;
+import com.task.poll.service.RestaurantService;
 import com.task.poll.to.RestaurantTo;
 import com.task.poll.util.RestaurantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +18,16 @@ public class RestaurantRestController {
 
     static final String REST_URL = "/api/v1/restaurants";
 
-    final RestaurantRepository restaurantRepository;
+    final RestaurantService restaurantService;
 
     @Autowired
-    public RestaurantRestController(RestaurantRepository restaurantRepository) {
-        this.restaurantRepository = restaurantRepository;
+    public RestaurantRestController(RestaurantService restaurantService) {
+        this.restaurantService = restaurantService;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<RestaurantTo> getAllTodayWithMenu() {
-        return RestaurantUtil.makeTos(restaurantRepository.getAllToday());
+        return RestaurantUtil.makeTos(restaurantService.getAllToday());
     }
 }

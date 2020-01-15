@@ -3,7 +3,7 @@ package com.task.poll.web.user;
 import com.task.poll.RestaurantTestData;
 import com.task.poll.VoteTestData;
 import com.task.poll.model.Vote;
-import com.task.poll.repository.VoteRepository;
+import com.task.poll.service.VoteService;
 import com.task.poll.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class VoteRestControllerTest extends AbstractControllerTest {
 
     @Autowired
-    VoteRepository repository;
+    VoteService repository;
 
     public VoteRestControllerTest() {
         super(VoteRestController.REST_URL);
