@@ -47,7 +47,6 @@ Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk
 
 ```
   curl 'http://localhost:8080/api/v1/votes' -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ='
-  
   curl 'http://localhost:8080/api/v1/votes?startDate=2019-10-21&endDate=2020-12-31' -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ='
 ```
 
@@ -68,13 +67,9 @@ curl 'http://localhost:8080/api/v1/vote?date=2019-11-20' -H 'Authorization: Basi
 
 ```
 curl 'http://localhost:8080/api/v1/admin/users' -i -d '{"name" : "NewUser", "email" : "new@yandex.ru","password" : "123456","roles" : ["ROLE_USER"]}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-
 curl 'http://localhost:8080/api/v1/admin/users' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-
 curl 'http://localhost:8080/api/v1/admin/users/100000' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-
 curl 'http://localhost:8080/api/v1/admin/users/100017' -i -X DELETE  -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-
 curl 'http://localhost:8080/api/v1/admin/users/by?email=user@yandex.ru' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
 ```
 
@@ -88,15 +83,10 @@ curl 'http://localhost:8080/api/v1/admin/votes' -H 'Authorization: Basic YWRtaW5
 
 ```
 curl 'http://localhost:8080/api/v1/admin/restaurants' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-
 curl 'http://localhost:8080/api/v1/admin/restaurants/100004' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-
 curl 'http://localhost:8080/api/v1/admin/restaurants/by?name=First' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-
 curl 'http://localhost:8080/api/v1/admin/restaurants' -i -d '{"name" : "NewOne"}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-
 curl 'http://localhost:8080/api/v1/admin/restaurants/100003' -i -X PUT -d '{"name" : "UpdatedName"}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-
 curl 'http://localhost:8080/api/v1/admin/restaurants/100004' -i -X DELETE -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
 ```
 
@@ -104,13 +94,9 @@ curl 'http://localhost:8080/api/v1/admin/restaurants/100004' -i -X DELETE -H 'Au
 
 ```
 curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-
 curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes?startDate=2019-11-21&endDate=2020-12-31' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-
 curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes' -i -d '{"name" : "NewDish","price" : "10.10"}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-
  curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes/100008' -i -X PUT -d '{"id":"100008","name" : "Updated","price" : "11.10"}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-
  curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes/100008' -i -X DELETE -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
 ```
 
