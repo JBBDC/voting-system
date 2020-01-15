@@ -8,8 +8,13 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
 import java.util.List;
+
+import static com.task.poll.util.ValidationUtil.checkId;
 
 @Service
 public class RestaurantService {
@@ -22,7 +27,7 @@ public class RestaurantService {
 
     @Transactional
     @CachePut(value = "restaurants", key = "#restaurant.name")
-    public Restaurant save(Restaurant restaurant) {
+    public Restaurant createOrUpdate(Restaurant restaurant) {
         if (!restaurant.isNew()) {
             int id = restaurant.getId();
             Restaurant existed = repository.get(id).orElseThrow(() -> new NotFoundException("not found restaurant with id = " + id));
@@ -36,9 +41,16 @@ public class RestaurantService {
         return repository.save(restaurant);
     }
 
+    public void update(Restaurant restaurant, int id) {
+        checkId(restaurant, id);
+        createOrUpdate(restaurant);
+    }
+
     @CacheEvict("restaurants")
-    public boolean delete(int id) throws NotFoundException {
-        return repository.delete(id) != 0;
+    public void delete(int id) throws NotFoundException {
+        if (repository.delete(id) == 0) {
+            throw new NotFoundException("not found restaurant with id = " + id);
+        }
     }
 
     public Restaurant get(int id) throws NotFoundException {

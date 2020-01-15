@@ -7,7 +7,6 @@ import com.task.poll.util.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -39,8 +38,7 @@ public class AdminRestController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@Validated @RequestBody User user) {
-        Assert.notNull(user, "user must not be null");
-        User created = userService.save(user);
+        User created = userService.createOrUpdate(user);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -50,17 +48,13 @@ public class AdminRestController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        if (!userService.delete(id)) {
-            throw new NotFoundException("not found restaurant with id = " + id);
-        }
+        userService.delete(id);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Validated @RequestBody User user, @PathVariable int id) {
-        Assert.notNull(user, "user must not be null");
-        ValidationUtil.assureIdConsistent(user, id);
-        userService.save(user);
+        userService.update(user, id);
     }
 
     @GetMapping("/by")

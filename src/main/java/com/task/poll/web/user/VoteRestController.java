@@ -50,10 +50,7 @@ public class VoteRestController {
     @GetMapping(value = "/vote", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public VoteTo getByDate(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        if (date == null) {
-            date = LocalDate.now();
-        }
-        return makeTo(checkNotFound(voteService.getByDateAndUser(date, SecurityUtil.authUserId()), "No vote for date " + date));
+        return makeTo(checkNotFound(voteService.getByDateAndUser(date), "No vote for date " + date));
     }
 
     @Transactional
@@ -77,6 +74,6 @@ public class VoteRestController {
     }
 
     private Vote getExisted() {
-        return voteService.getByDateAndUser(LocalDate.now(), SecurityUtil.authUserId());
+        return voteService.getByDateAndUser(LocalDate.now());
     }
 }

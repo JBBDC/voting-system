@@ -3,11 +3,15 @@ package com.task.poll.service;
 import com.task.poll.AuthorizedUser;
 import com.task.poll.model.User;
 import com.task.poll.repository.CrudUserRepository;
+import com.task.poll.util.ValidationUtil;
 import com.task.poll.util.exception.NotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -21,12 +25,19 @@ public class UserServiceDetails implements UserDetailsService {
         this.repository = repository;
     }
 
-    public User save(User user) {
+    public User createOrUpdate(User user) {
         return repository.save(user);
     }
 
-    public boolean delete(int id) {
-        return repository.delete(id) != 0;
+    public void update(User user, int id) {
+        ValidationUtil.assureIdConsistent(user, id);
+        createOrUpdate(user);
+    }
+
+    public void delete(int id) {
+        if (repository.delete(id) == 0) {
+            throw new NotFoundException("not found restaurant with id = " + id);
+        }
     }
 
     public User get(int id) {

@@ -4,7 +4,6 @@ import com.task.poll.model.Dish;
 import com.task.poll.repository.CrudRestaurantRepository;
 import com.task.poll.service.DishService;
 import com.task.poll.to.DishTo;
-import com.task.poll.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -57,7 +56,7 @@ public class AdminDishRestController {
     @PostMapping(value = "/{restaurantId}/dishes", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DishTo> createWithLocation(@PathVariable int restaurantId, @RequestBody @Valid Dish dish) {
         checkNew(dish);
-        Dish created = dishService.save(restaurantId, dish);
+        Dish created = dishService.createOrUpdate(restaurantId, dish);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{restaurantId}/dishes/{id}")
@@ -69,15 +68,12 @@ public class AdminDishRestController {
     @PutMapping(value = "/{restaurantId}/dishes/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable int restaurantId, @RequestBody @Valid Dish dish, @PathVariable int id) {
-        checkId(dish, id);
-        dishService.save(restaurantId, dish);
+        dishService.update(restaurantId, dish, id);
     }
 
     @DeleteMapping("/{restaurantId}/dishes/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int restaurantId, @PathVariable int id) {
-        if (!dishService.delete(restaurantId, id)) {
-            throw new NotFoundException("not found dish with id = " + id + " for restaurant " + restaurantId);
-        }
+        dishService.delete(restaurantId, id);
     }
 }

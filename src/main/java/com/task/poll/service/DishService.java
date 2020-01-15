@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.task.poll.util.DateTimeUtil.getEndIfNull;
 import static com.task.poll.util.DateTimeUtil.getStartIfNull;
+import static com.task.poll.util.ValidationUtil.checkId;
 
 @Service
 public class DishService {
@@ -28,13 +29,18 @@ public class DishService {
 
     @Transactional
     @CacheEvict("restaurants")
-    public Dish save(int restaurantId, Dish dish) {
+    public Dish createOrUpdate(int restaurantId, Dish dish) {
         if (!dish.isNew()) {
             repository.getByIdAndRestaurant(restaurantId, dish.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Dish id=" + dish.getId() + " not consistent with restaurant id=" + restaurantId));
         }
         dish.setRestaurant(restaurantRepository.getOne(restaurantId));
         return repository.save(dish);
+    }
+
+    public void update(int restaurantId, Dish dish, int id){
+        checkId(dish, id);
+        createOrUpdate(restaurantId, dish);
     }
 
     public List<Dish> getAll(int restId) {
@@ -53,7 +59,9 @@ public class DishService {
     }
 
     @CacheEvict("restaurants")
-    public boolean delete(int restaurantId, int id) {
-        return repository.delete(restaurantId, id) != 0;
+    public void delete(int restaurantId, int id) {
+        if (repository.delete(restaurantId, id) == 0) {
+            throw new NotFoundException("not found dish with id = " + id + " for restaurant " + restaurantId);
+        }
     }
 }
