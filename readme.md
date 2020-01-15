@@ -30,7 +30,11 @@ or
 
 ```
 $ mvn clean package
+<<<<<<< HEAD
 $ java -Dfile.encoding=UTF8 -jar target/task-0.0.1-SNAPSHOT.jar
+=======
+$ java -Dfile.encoding=UTF8 -jar target/lunch-voting.jar
+>>>>>>> 8693ceeb1386518296ebf4b2101b5cf9427355bf
 ```
 
 ### Credentials:
