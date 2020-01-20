@@ -42,18 +42,8 @@ public class VoteRestController {
 
     @GetMapping(value = "/votes", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<VoteTo> getBetween(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                   @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return makeTos(voteService.getByUserBetweenDates(SecurityUtil.authUserId(), startDate, endDate));
-    }
-
-    @GetMapping(value = "/vote", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public VoteTo getByDate(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        if (date == null) {
-            date = LocalDate.now();
-        }
-        return makeTo(checkNotFound(voteService.getByDateAndUser(date), "No vote for date " + date));
+    public VoteTo getToday() {
+        return makeTo(checkNotFound(voteService.getByDateAndUser(LocalDate.now()), "Not found Vote for today"));
     }
 
     @Transactional
@@ -64,7 +54,7 @@ public class VoteRestController {
         Vote existed = getExisted();
         HttpStatus status = HttpStatus.CREATED;
         if (existed != null) {
-            if (existed.getRestaurant().getId().equals(restaurant.getId()) || LocalTime.now().isAfter(EXPIRED)) {
+            if (LocalTime.now().isAfter(EXPIRED)) {
                 return new ResponseEntity<>(makeTo(existed), HttpStatus.CONFLICT);
             } else {
                 status = HttpStatus.OK;

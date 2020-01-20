@@ -38,11 +38,11 @@ $ java -Dfile.encoding=UTF8 -jar target/task-0.0.1-SNAPSHOT.jar
 ```
 User login: user@yandex.ru
       Password: password
-Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ=
+Authorization: --user user@yandex.ru:password
 
    Admin login: admin@gmail.com
       Password: password
-Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk
+Authorization: --user admin@gmail.com:password
 ```
 
 ###  **CURL examples**:
@@ -52,73 +52,141 @@ Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk
 - **GET restaurants with menu for today:** 
 
 ```
-  curl 'http://localhost:8080/api/v1/restaurants' -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ='
+  curl 'http://localhost:8080/api/v1/restaurants' --user user@yandex.ru:password
 ```
 
 - **Vote for restaurant with id 100004:** 
 
- ```
-   curl 'http://localhost:8080/api/v1/vote/100004' -i -X POST -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ=' -H "Content-Type: application/json"
- ```
-
-- **GET votes history for user:** 
-
 ```
-  curl 'http://localhost:8080/api/v1/votes' -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ='
-  curl 'http://localhost:8080/api/v1/votes?startDate=2019-10-21&endDate=2020-12-31' -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ='
+   curl 'http://localhost:8080/api/v1/vote/100004' -i -X POST --user user@yandex.ru:password -H "Content-Type: application/json"
 ```
 
-  
+- **GET vote for today:**
 
-- **GET vote for today or arbitrary date:**
-
- ```
-curl 'http://localhost:8080/api/v1/vote' -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ='
-curl 'http://localhost:8080/api/v1/vote?date=2019-11-20' -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ='
 ```
-  
+curl 'http://localhost:8080/api/v1/votes' --user user@yandex.ru:password
+```
+
   
 
 #### ADMIN:
 
 - #### Users:
 
-```
-curl 'http://localhost:8080/api/v1/admin/users' -i -d '{"name" : "NewUser", "email" : "new@yandex.ru","password" : "123456","roles" : ["ROLE_USER"]}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-curl 'http://localhost:8080/api/v1/admin/users' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-curl 'http://localhost:8080/api/v1/admin/users/100000' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-curl 'http://localhost:8080/api/v1/admin/users/100017' -i -X DELETE  -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-curl 'http://localhost:8080/api/v1/admin/users/by?email=user@yandex.ru' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-```
-
-- #### Votes:
+  **GET all users:**
 
 ```
-curl 'http://localhost:8080/api/v1/admin/votes' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
+curl 'http://localhost:8080/api/v1/admin/users' --user admin@gmail.com:password
 ```
+
+​		**GET user by email:**
+
+```
+curl 'http://localhost:8080/api/v1/admin/users/by?email=user@yandex.ru' --user admin@gmail.com:password
+```
+
+​		**GET user with id 100000:**
+
+```
+curl 'http://localhost:8080/api/v1/admin/users/100000' --user admin@gmail.com:password
+```
+
+​		**Create new user:**
+
+```
+curl 'http://localhost:8080/api/v1/admin/users' -i -d '{"name" : "NewUser", "email" : "new@yandex.ru","password" : "123456","roles" : ["ROLE_USER"]}' --user admin@gmail.com:password -H "Content-Type: application/json"
+```
+
+
+​		**DELETE user with id 100017:**
+
+```
+curl 'http://localhost:8080/api/v1/admin/users/100017' -i -X DELETE  --user admin@gmail.com:password -H "Content-Type: application/json"
+```
+
+
+
+
+- ####  Votes:
+
+  **GET voting history:**
+
+```
+curl 'http://localhost:8080/api/v1/admin/votes' --user admin@gmail.com:password
+
+curl 'http://localhost:8080/api/v1/admin/votes?startDate=2019-11-21&endDate=2020-12-31' --user admin@gmail.com:password
+```
+
+
 
 - #### Restaurants:
 
+  **GET all restaurants:**
+
 ```
-curl 'http://localhost:8080/api/v1/admin/restaurants' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-curl 'http://localhost:8080/api/v1/admin/restaurants/100004' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-curl 'http://localhost:8080/api/v1/admin/restaurants/by?name=First' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-curl 'http://localhost:8080/api/v1/admin/restaurants' -i -d '{"name" : "NewOne"}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-curl 'http://localhost:8080/api/v1/admin/restaurants/100003' -i -X PUT -d '{"id":"100003","name" : "UpdatedName"}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-curl 'http://localhost:8080/api/v1/admin/restaurants/100004' -i -X DELETE -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
+curl 'http://localhost:8080/api/v1/admin/restaurants' --user admin@gmail.com:password
 ```
+
+​		**GET restaurant with id 100004:**
+
+```
+curl 'http://localhost:8080/api/v1/admin/restaurants/100004' --user admin@gmail.com:password
+```
+
+​		**GET restaurant by name:**
+
+```
+curl 'http://localhost:8080/api/v1/admin/restaurants/by?name=First' --user admin@gmail.com:password
+```
+
+​		**Create new restaurant:**
+
+```
+curl 'http://localhost:8080/api/v1/admin/restaurants' -i -d '{"name" : "NewOne"}' --user admin@gmail.com:password -H "Content-Type: application/json"
+```
+
+​		**Update restaurant with id 100003:**
+
+```
+curl 'http://localhost:8080/api/v1/admin/restaurants/100003' -i -X PUT -d '{"id":"100003","name" : "UpdatedName"}' --user admin@gmail.com:password -H "Content-Type: application/json"
+```
+
+​		**DELETE restaurant with id 100004:**
+
+```
+curl 'http://localhost:8080/api/v1/admin/restaurants/100004' -i -X DELETE --user admin@gmail.com:password -H "Content-Type: application/json"
+```
+
+
 
 - #### Dishes:
 
+  **GET all dishes for restaurant with id 100003:**
+
 ```
-curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes?startDate=2019-11-21&endDate=2020-12-31' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk'
-curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes' -i -d '{"name" : "NewDish","price" : "10.10"}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes/100008' -i -X PUT -d '{"id":"100008","name" : "Updated","price" : "11.10"}' -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
-curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes/100008' -i -X DELETE -H 'Authorization: Basic YWRtaW5AZ21haWwuY29tOnBhc3N3b3Jk' -H "Content-Type: application/json"
+curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes' --user admin@gmail.com:password
 ```
 
-  
+​		**GET  dishes for restaurant with id 100003 filtered by date:**
 
-  
+```
+curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes?startDate=2019-11-21&endDate=2020-12-31' --user admin@gmail.com:password
+```
 
+​		**Create new dish for restaurant with id 100003:**
+
+```
+curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes' -i -d '{"name" : "NewDish","price" : "10.10"}' --user admin@gmail.com:password -H "Content-Type: application/json"
+```
+
+​		**Update dish 100008 for restaurant 100003:**
+
+```
+curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes/100008' -i -X PUT -d '{"id":"100008","name" : "Updated","price" : "11.10"}' --user admin@gmail.com:password -H "Content-Type: application/json"
+```
+
+​		**DELETE dish with id 100008:**
+
+```
+ curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes/100008' -i -X DELETE --user admin@gmail.com:password -H "Content-Type: application/json"
+```
