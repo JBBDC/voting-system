@@ -35,10 +35,9 @@ public class Dish extends AbstractNamedEntity {
         this(copy.getId(), copy.getName(), copy.getPrice());
     }
 
-    public Dish(String name, BigDecimal price, Restaurant restaurant) {
-        this.name = name;
+    public Dish(String name, BigDecimal price) {
+        super(name);
         this.price = price;
-        this.restaurant = restaurant;
     }
 
     public Dish(int id, String name, BigDecimal price) {
@@ -46,9 +45,9 @@ public class Dish extends AbstractNamedEntity {
         this.price = price;
     }
 
-    public Dish(String name, BigDecimal price) {
-        this.name = name;
-        this.price = price;
+    public Dish(String name, BigDecimal price, Restaurant restaurant) {
+        this(name, price);
+        this.restaurant = restaurant;
     }
 
     public BigDecimal getPrice() {
