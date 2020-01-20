@@ -10,12 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "unique_restaurant")})
-public class Restaurant extends AbstractBaseEntity {
-
-    @Column(name = "name", nullable = false)
-    @NotBlank
-    @Size(min = 2, max = 50)
-    private String name;
+public class Restaurant extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("id ASC")
@@ -36,22 +31,12 @@ public class Restaurant extends AbstractBaseEntity {
     }
 
     public Restaurant(int id, String name) {
-        super(id);
-        this.name = name;
+        super(id, name);
     }
 
     public Restaurant(int id, String name, List<Dish> menu) {
-        super(id);
-        this.name = name;
+        super(id, name);
         this.menu = menu;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public List<Dish> getMenu() {

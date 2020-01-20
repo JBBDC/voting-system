@@ -27,7 +27,7 @@ import static com.task.poll.util.VoteUtil.*;
 @RequestMapping(VoteRestController.REST_URL)
 public class VoteRestController {
     public static LocalTime EXPIRED = LocalTime.of(11, 0, 0);
-    static final String REST_URL = "/api/v1/";
+    static final String REST_URL = "/api/v1/votes";
 
     private final VoteService voteService;
     private final RestaurantService restaurantService;
@@ -40,14 +40,14 @@ public class VoteRestController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping(value = "/votes", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public VoteTo getToday() {
         return makeTo(checkNotFound(voteService.getByDateAndUser(LocalDate.now()), "Not found Vote for today"));
     }
 
     @Transactional
-    @PostMapping(value = "vote/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<VoteTo> vote(@PathVariable int restaurantId) {
         Restaurant restaurant = restaurantService.get(restaurantId);
         Vote vote = new Vote();

@@ -1,6 +1,5 @@
 package com.task.poll.util;
 
-import com.task.poll.model.Role;
 import com.task.poll.model.User;
 import com.task.poll.to.UserTo;
 

@@ -13,12 +13,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "dishes")
-public class Dish extends AbstractBaseEntity {
-
-    @Column(name = "name")
-    @NotBlank
-    @Size(min = 2, max = 50)
-    private String name;
+public class Dish extends AbstractNamedEntity {
 
     @Column(name = "price")
     @NotNull
@@ -47,22 +42,13 @@ public class Dish extends AbstractBaseEntity {
     }
 
     public Dish(int id, String name, BigDecimal price) {
-        super(id);
-        this.name = name;
+        super(id, name);
         this.price = price;
     }
 
     public Dish(String name, BigDecimal price) {
         this.name = name;
         this.price = price;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public BigDecimal getPrice() {

@@ -14,13 +14,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
-public class User extends AbstractBaseEntity {
-
-    @NotBlank
-    @Size(min = 2, max = 100)
-    @Column(name = "name", nullable = false)
-    @SafeHtml
-    protected String name;
+public class User extends AbstractNamedEntity {
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
@@ -68,21 +62,12 @@ public class User extends AbstractBaseEntity {
     }
 
     public User(Integer id, String name, String email, String password, LocalDate registered, boolean enabled, Collection<Role> roles) {
-        super(id);
-        this.name = name;
+        super(id, name);
         this.email = email;
         this.password = password;
         this.enabled = enabled;
         this.registered = registered;
         setRoles(roles);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEmail() {

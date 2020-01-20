@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import static com.task.poll.DishTestData.*;
 import static com.task.poll.UserTestData.*;
@@ -31,35 +30,8 @@ class VoteRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getBetween() throws Exception {
-        perform(doGet("/votes?startDate=2019-11-20&endDate=2019-11-21").basicAuth(USER))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(VOTE_TO_MATCHERS.contentJson(makeTos(List.of(USER_VOTE_1))));
-    }
-
-    @Test
-    void getAll() throws Exception {
-        perform(doGet("/votes").basicAuth(USER))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(VOTE_TO_MATCHERS.contentJson(makeTos(List.of(USER_VOTE_1, USER_VOTE_2))));
-    }
-
-    @Test
-    void getByDate() throws Exception {
-        perform(doGet("/vote?date=2019-11-20").basicAuth(USER))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(VOTE_TO_MATCHERS.contentJson(makeTo(USER_VOTE_1)));
-    }
-
-    @Test
     void getToday() throws Exception {
-        perform(doGet("/vote").basicAuth(ADMIN))
+        perform(doGet().basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
@@ -68,7 +40,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void vote() throws Exception {
-        perform(doPost("/vote/{restaurantId}", RestaurantTestData.REST_1_ID).basicAuth(USER))
+        perform(doPost("/{restaurantId}", RestaurantTestData.REST_1_ID).basicAuth(USER))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
@@ -77,7 +49,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void voteForNotExisted() throws Exception {
-        perform(doPost("/vote/{restaurantId}", NOT_EXISTED_ID).basicAuth(USER2))
+        perform(doPost("/{restaurantId}", NOT_EXISTED_ID).basicAuth(USER2))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
 
@@ -87,7 +59,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     void revoteBeforeExpired() throws Exception {
         Vote updated = VoteTestData.getUpdated();
         VoteRestController.EXPIRED = LocalTime.now().plus(5, ChronoUnit.MINUTES);
-        perform(doPost("/vote/{restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(ADMIN))
+        perform(doPost("/{restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
@@ -98,7 +70,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     void revoteAfterExpired() throws Exception {
         VoteRestController.EXPIRED = LocalTime.now().minus(5, ChronoUnit.MINUTES);
-        perform(doPost("/vote/{restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(ADMIN))
+        perform(doPost("/{restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
