@@ -73,7 +73,7 @@ curl 'http://localhost:8080/api/v1/votes' --user user@yandex.ru:password
 
 - #### Users:
 
-  **GET all users:**
+ **GET all users:**
 
 ```
 curl 'http://localhost:8080/api/v1/admin/users' --user admin@gmail.com:password
@@ -109,7 +109,7 @@ curl 'http://localhost:8080/api/v1/admin/users/100017' -i -X DELETE  --user admi
 
 - ####  Votes:
 
-  **GET voting history:**
+ **GET voting history:**
 
 ```
 curl 'http://localhost:8080/api/v1/admin/votes' --user admin@gmail.com:password
@@ -121,7 +121,7 @@ curl 'http://localhost:8080/api/v1/admin/votes?startDate=2019-11-21&endDate=2020
 
 - #### Restaurants:
 
-  **GET all restaurants:**
+ **GET all restaurants:**
 
 ```
 curl 'http://localhost:8080/api/v1/admin/restaurants' --user admin@gmail.com:password
@@ -161,7 +161,7 @@ curl 'http://localhost:8080/api/v1/admin/restaurants/100004' -i -X DELETE --user
 
 - #### Dishes:
 
-  **GET all dishes for restaurant with id 100003:**
+ **GET all dishes for restaurant with id 100003:**
 
 ```
 curl 'http://localhost:8080/api/v1/admin/restaurants/100003/dishes' --user admin@gmail.com:password
