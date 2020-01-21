@@ -1,4 +1,4 @@
-### Test task
+## Test task
 
 Voting system for deciding where to have lunch.
 
@@ -17,12 +17,12 @@ Each restaurant provides new menu each day.
 - Spring Boot
 - Spring Data JPA
 
-### Install:
+## Install:
 ```
 $ git clone https://github.com/JBBDC/voting-system
 ```
 
-### Run:
+## Run:
 ```
 $ mvn spring-boot:run
 ```
@@ -33,7 +33,7 @@ $ mvn clean package
 $ java -Dfile.encoding=UTF8 -jar target/task-0.0.1-SNAPSHOT.jar
 ```
 
-### Credentials:
+## Credentials:
 
 ```
 User login: user@yandex.ru
@@ -46,6 +46,8 @@ Authorization: --user admin@gmail.com:password
 ```
 
 ##  **CURL examples**:
+
+
 
 ## 	USER:
 
@@ -66,7 +68,7 @@ Authorization: --user admin@gmail.com:password
 ```
 curl 'http://localhost:8080/api/v1/votes' --user user@yandex.ru:password
 ```
------------------------
+
   
 ## ADMIN:
 
