@@ -45,9 +45,9 @@ Authorization: --user user@yandex.ru:password
 Authorization: --user admin@gmail.com:password
 ```
 
-###  **CURL examples**:
+##  **CURL examples**:
 
-#### 	USER:
+### 	USER:
 
 - **GET restaurants with menu for today:** 
 
@@ -69,9 +69,9 @@ curl 'http://localhost:8080/api/v1/votes' --user user@yandex.ru:password
 
   
 
-#### ADMIN:
+### ADMIN:
 
-- #### Users:
+- ### Users:
 
  **GET all users:**
 
@@ -107,7 +107,7 @@ curl 'http://localhost:8080/api/v1/admin/users/100017' -i -X DELETE  --user admi
 
 
 
-- ####  Votes:
+- ###  Votes:
 
  **GET voting history:**
 
@@ -119,7 +119,7 @@ curl 'http://localhost:8080/api/v1/admin/votes?startDate=2019-11-21&endDate=2020
 
 
 
-- #### Restaurants:
+- ### Restaurants:
 
  **GET all restaurants:**
 
@@ -159,7 +159,7 @@ curl 'http://localhost:8080/api/v1/admin/restaurants/100004' -i -X DELETE --user
 
 
 
-- #### Dishes:
+- ### Dishes:
 
  **GET all dishes for restaurant with id 100003:**
 
