@@ -47,8 +47,8 @@ public class VoteRestController {
     }
 
     @Transactional
-    @PostMapping(value = "/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VoteTo> vote(@PathVariable int restaurantId) {
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VoteTo> vote(@RequestParam int restaurantId) {
         Restaurant restaurant = restaurantService.get(restaurantId);
         Vote vote = new Vote();
         Vote existed = getExisted();

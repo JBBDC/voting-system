@@ -40,7 +40,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void vote() throws Exception {
-        perform(doPost("/{restaurantId}", RestaurantTestData.REST_1_ID).basicAuth(USER))
+        perform(doPost("?restaurantId={restaurantId}", RestaurantTestData.REST_1_ID).basicAuth(USER))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
@@ -49,7 +49,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void voteForNotExisted() throws Exception {
-        perform(doPost("/{restaurantId}", NOT_EXISTED_ID).basicAuth(USER2))
+        perform(doPost("?restaurantId={restaurantId}", NOT_EXISTED_ID).basicAuth(USER2))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
 
@@ -59,7 +59,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     void revoteBeforeExpired() throws Exception {
         Vote updated = VoteTestData.getUpdated();
         VoteRestController.EXPIRED = LocalTime.now().plus(5, ChronoUnit.MINUTES);
-        perform(doPost("/{restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(ADMIN))
+        perform(doPost("?restaurantId={restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
@@ -70,7 +70,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     void revoteAfterExpired() throws Exception {
         VoteRestController.EXPIRED = LocalTime.now().minus(5, ChronoUnit.MINUTES);
-        perform(doPost("/{restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(ADMIN))
+        perform(doPost("?restaurantId={restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(ADMIN))
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))

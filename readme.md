@@ -60,7 +60,7 @@ Authorization: --user admin@gmail.com:password
 - **Vote for restaurant with id 100004:** 
 
 ```
-   curl 'http://localhost:8080/api/v1/votes/100004' -i -X POST --user user@yandex.ru:password -H "Content-Type: application/json"
+   curl 'http://localhost:8080/api/v1/votes?restaurantId=100004' -i -X POST --user user@yandex.ru:password -H "Content-Type: application/json"
 ```
 
 - **GET vote for today:**
