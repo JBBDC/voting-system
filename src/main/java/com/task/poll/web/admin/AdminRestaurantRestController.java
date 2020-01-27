@@ -3,7 +3,6 @@ package com.task.poll.web.admin;
 import com.task.poll.model.Restaurant;
 import com.task.poll.service.RestaurantService;
 import com.task.poll.to.RestaurantTo;
-import com.task.poll.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -63,7 +62,8 @@ public class AdminRestaurantRestController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@RequestBody @Valid Restaurant restaurant, @PathVariable int id) {
-        restaurantService.update(restaurant, id);
+        checkId(restaurant, id);
+        restaurantService.createOrUpdate(restaurant);
     }
 
     @DeleteMapping("/{id}")

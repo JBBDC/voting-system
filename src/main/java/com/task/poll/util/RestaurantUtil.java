@@ -20,7 +20,6 @@ public class RestaurantUtil {
         if(restaurants != null) {
             return restaurants.stream()
                     .map(RestaurantUtil::makeTo)
-                    .sorted(Comparator.comparing(RestaurantTo::getName))
                     .collect(Collectors.toList());
         }
         return new ArrayList<>();

@@ -19,10 +19,10 @@ public interface CrudRestaurantRepository extends JpaRepository<Restaurant, Inte
     @Query("DELETE FROM Restaurant r WHERE r.id=:id")
     int delete(@Param("id") int id);
 
-    @Query("SELECT DISTINCT r FROM Restaurant r LEFT JOIN FETCH r.menu m WHERE function('FORMATDATETIME', m.created, 'yyyy-MM-dd') = CURRENT_DATE")
+    @Query("SELECT DISTINCT r FROM Restaurant r LEFT JOIN FETCH r.menu m WHERE function('FORMATDATETIME', m.created, 'yyyy-MM-dd') = CURRENT_DATE ORDER BY r.name ASC")
     List<Restaurant> getAllToday();
 
-    @Query("SELECT DISTINCT r FROM Restaurant r LEFT JOIN FETCH r.menu m")
+    @Query("SELECT DISTINCT r FROM Restaurant r LEFT JOIN FETCH r.menu m ORDER BY r.name ASC")
     List<Restaurant> getAll();
 
     @Query("SELECT DISTINCT r FROM Restaurant r LEFT JOIN FETCH r.menu m WHERE r.id=:id ")

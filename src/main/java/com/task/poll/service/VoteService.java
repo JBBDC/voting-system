@@ -3,7 +3,6 @@ package com.task.poll.service;
 import com.task.poll.model.Vote;
 import com.task.poll.repository.CrudVoteRepository;
 import com.task.poll.util.SecurityUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +11,6 @@ import java.util.List;
 
 import static com.task.poll.util.DateTimeUtil.getEndIfNull;
 import static com.task.poll.util.DateTimeUtil.getStartIfNull;
-import static com.task.poll.util.ValidationUtil.checkNotFound;
-import static com.task.poll.util.VoteUtil.makeTo;
 
 @Service
 public class VoteService {

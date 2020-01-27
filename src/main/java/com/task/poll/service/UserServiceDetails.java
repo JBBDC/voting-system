@@ -36,12 +36,12 @@ public class UserServiceDetails implements UserDetailsService {
 
     public void delete(int id) {
         if (repository.delete(id) == 0) {
-            throw new NotFoundException("not found user with id = " + id);
+            throw new NotFoundException("Not found user with id = " + id);
         }
     }
 
     public User get(int id) {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("not found user with id = " + id));
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Not found user with id = " + id));
     }
 
     public User getByEmail(String email) {
@@ -56,7 +56,7 @@ public class UserServiceDetails implements UserDetailsService {
     public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = repository.getByEmail(email.toLowerCase());
         if (user == null) {
-            throw new UsernameNotFoundException("User " + email + " is not found");
+            throw new UsernameNotFoundException("Not found user with email=" + email);
         }
         return new AuthorizedUser(user);
     }

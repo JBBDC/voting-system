@@ -55,13 +55,13 @@ public class DishService {
     }
 
     public Dish get(int restaurantId, int id) {
-        return repository.getByIdAndRestaurant(restaurantId, id).orElseThrow(() -> new NotFoundException("not found dish with id = " + id + "and restaurantId = " + restaurantId));
+        return repository.getByIdAndRestaurant(restaurantId, id).orElseThrow(() -> new NotFoundException("Not found dish with id = " + id + "and restaurantId = " + restaurantId));
     }
 
     @CacheEvict("restaurants")
     public void delete(int restaurantId, int id) {
         if (repository.delete(restaurantId, id) == 0) {
-            throw new NotFoundException("not found dish with id = " + id + " for restaurant " + restaurantId);
+            throw new NotFoundException("Not found dish with id = " + id + " for restaurant " + restaurantId);
         }
     }
 }
