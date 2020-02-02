@@ -7,6 +7,7 @@ import com.task.poll.service.RestaurantService;
 import com.task.poll.service.VoteService;
 import com.task.poll.to.VoteTo;
 import com.task.poll.util.SecurityUtil;
+import com.task.poll.util.exception.TimeExpiredException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -31,42 +32,36 @@ public class VoteRestController {
 
     private final VoteService voteService;
     private final RestaurantService restaurantService;
-    private final CrudUserRepository userRepository;
 
     @Autowired
-    public VoteRestController(VoteService voteService, RestaurantService restaurantService, CrudUserRepository userRepository) {
+    public VoteRestController(VoteService voteService, RestaurantService restaurantService) {
         this.voteService = voteService;
         this.restaurantService = restaurantService;
-        this.userRepository = userRepository;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public VoteTo getToday() {
-        return makeTo(checkNotFound(voteService.getByDateAndUser(LocalDate.now()), "Not found Vote for today"));
+        return makeTo(checkNotFound(voteService.getByDateAndUser(LocalDate.now(), SecurityUtil.authUserId()), "Not found Vote for today"));
     }
 
     @Transactional
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<VoteTo> vote(@RequestParam int restaurantId) {
         Restaurant restaurant = restaurantService.get(restaurantId);
-        Vote vote = new Vote();
         Vote existed = getExisted();
         HttpStatus status = HttpStatus.CREATED;
         if (existed != null) {
             if (LocalTime.now().isAfter(EXPIRED)) {
-                return new ResponseEntity<>(makeTo(existed), HttpStatus.CONFLICT);
+                throw new TimeExpiredException("Vote change are not allowed after "+EXPIRED.toString());
             } else {
-                status = HttpStatus.OK;
-                vote.setId(existed.getId());
+                return new ResponseEntity<>(makeTo(voteService.update(restaurant, existed.getId(), SecurityUtil.authUserId())), HttpStatus.OK);
             }
         }
-        vote.setRestaurant(restaurant);
-        vote.setUser(userRepository.getOne(SecurityUtil.authUserId()));
-        return new ResponseEntity<>(makeTo(voteService.save(vote)), status);
+        return new ResponseEntity<>(makeTo(voteService.create(restaurant, SecurityUtil.authUserId())), status);
     }
 
     private Vote getExisted() {
-        return voteService.getByDateAndUser(LocalDate.now());
+        return voteService.getByDateAndUser(LocalDate.now(), SecurityUtil.authUserId());
     }
 }

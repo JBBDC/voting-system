@@ -1,6 +1,8 @@
 package com.task.poll.service;
 
+import com.task.poll.model.Restaurant;
 import com.task.poll.model.Vote;
+import com.task.poll.repository.CrudUserRepository;
 import com.task.poll.repository.CrudVoteRepository;
 import com.task.poll.util.SecurityUtil;
 import org.springframework.lang.Nullable;
@@ -15,9 +17,13 @@ import static com.task.poll.util.DateTimeUtil.getStartIfNull;
 @Service
 public class VoteService {
     private CrudVoteRepository repository;
+    private CrudUserRepository userRepository;
+    private RestaurantService restaurantService;
 
-    public VoteService(CrudVoteRepository repository) {
+    public VoteService(CrudVoteRepository repository, CrudUserRepository userRepository, RestaurantService restaurantService) {
         this.repository = repository;
+        this.userRepository = userRepository;
+        this.restaurantService = restaurantService;
     }
 
     public List<Vote> getByUserBetweenDates(int userId, @Nullable LocalDate startDate, @Nullable LocalDate endDate) {
@@ -42,11 +48,24 @@ public class VoteService {
         return repository.findAll();
     }
 
-    public Vote getByDateAndUser(LocalDate date) {
-        return repository.getByDateAndUserId(date, SecurityUtil.authUserId()).orElse(null);
+    public Vote getByDateAndUser(LocalDate date, int userId) {
+        return repository.getByDateAndUserId(date, userId).orElse(null);
     }
 
     public Vote save(Vote vote) {
         return repository.save(vote);
+    }
+
+    public Vote create(Restaurant restaurant, int userId){
+        Vote vote = new Vote();
+        vote.setRestaurant(restaurant);
+        vote.setUser(userRepository.getOne(userId));
+        return save(vote);
+    }
+
+    public Vote update(Restaurant restaurant, int voteId, int userId){
+        Vote vote = new Vote(userRepository.getOne(userId), restaurant);
+        vote.setId(voteId);
+        return save(vote);
     }
 }

@@ -27,8 +27,8 @@ public class ExceptionInfoHandler {
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
+    @ExceptionHandler({DataIntegrityViolationException.class, TimeExpiredException.class})
+    public ErrorInfo conflict(HttpServletRequest req, Exception e) {
         return logAndGetErrorInfo(req, e, true);
     }
 

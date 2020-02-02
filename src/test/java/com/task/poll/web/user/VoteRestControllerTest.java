@@ -72,9 +72,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
         VoteRestController.EXPIRED = LocalTime.now().minus(5, ChronoUnit.MINUTES);
         perform(doPost("?restaurantId={restaurantId}", RestaurantTestData.REST_1_ID + 1).basicAuth(ADMIN))
                 .andDo(print())
-                .andExpect(status().isConflict())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(VOTE_TO_MATCHERS.contentJson(makeTo(ADMIN_VOTE_2)));
+                .andExpect(status().isConflict());
         VOTE_TO_MATCHERS.assertMatch(makeTos(repository.getAllByUser(ADMIN_ID)), makeTos(ADMIN_VOTE_1, ADMIN_VOTE_2));
     }
 }
